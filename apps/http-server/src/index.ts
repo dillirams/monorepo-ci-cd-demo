@@ -13,7 +13,7 @@ app.get("/user", (req, res) => {
     });
 })
 
-app.post("/user", (req, res) => {
+app.post("/user", async(req, res) => {
   const { name, password } = req.body;
   
   if (!name || !password) {
@@ -21,7 +21,19 @@ app.post("/user", (req, res) => {
     return
   }
 
-  prisma.user.create({
+  const user=await prisma.user.findFirst({
+    where:{
+      name:name
+    }
+  })
+
+  if(user){
+    res.status(200).json({
+      message:"user already exist"
+    })
+  }
+
+ await prisma.user.create({
     data: {
       name,
       password
