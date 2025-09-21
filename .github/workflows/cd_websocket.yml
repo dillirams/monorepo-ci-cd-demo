@@ -23,3 +23,8 @@ jobs:
           file: ./docker/Dockerfile.websocket
           push: true
           tags: dillax/user-app-websocket:${{ github.sha }}
+      - name: Deploy to the Vm
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 700 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.127.13.226 -t "sudo docker stop user_backend_app && sudo docker run --name user_backend_app -d -p 8081:8081 dillax/user-app-backend:${{ github.sha }}"
