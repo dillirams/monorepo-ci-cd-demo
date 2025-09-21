@@ -26,11 +26,13 @@ jobs:
 
       - name: Deploy to the Vm
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
-          chmod 600 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.127.13.226 << 'EOF'
-            set -e
-            sudo docker stop user_backend_app || true
-            sudo docker rm user_backend_app || true
-            sudo docker run --name user_backend_app -d -p 8081:8081 dillax/user-app-backend:${GITHUB_SHA}
-          EOF
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+            chmod 600 ~/ssh_key
+            ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.127.13.226 << EOF
+              set -e
+              IMAGE=dillax/user-app-backend:${GITHUB_SHA}
+              sudo docker stop user_backend_app || true
+              sudo docker rm user_backend_app || true
+              sudo docker run --name user_backend_app -d -p 8081:8081 \$IMAGE
+            EOF
+
