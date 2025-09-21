@@ -23,3 +23,9 @@ jobs:
           file: ./docker/Dockerfile.backend
           push: true
           tags: dillax/user-app-backend:${{ github.sha }}
+
+      - name: Deploy to the Vm
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 700 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@172-31-36-196 -t "docker stop user_backend_app && docker run --name user_backend_app -d -p 8081:8081 dillax/user-app-backend:${{ github.sha }}"
