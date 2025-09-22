@@ -33,5 +33,5 @@ jobs:
               sudo docker stop user_websokcet_app || true
               sudo docker rm user_websocket_app || true
               
-              sudo docker run --name user_websocket_app -d -p 8081:8081 \$IMAGE
+              sudo docker run --name user_websocket_app -d -p 8080:8080 \$IMAGE
             EOF
