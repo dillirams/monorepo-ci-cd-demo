@@ -1,6 +1,9 @@
 import {prisma} from '@repo/db/db'
 
 export default async function Home() {
+  if (process.env.SKIP_BUILD_DB === "true") {
+    return { props: { users: [] } } // return empty placeholder
+  }
   const user=await prisma.user.findMany()
   console.log(user)
   if(user){

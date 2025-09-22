@@ -33,6 +33,7 @@ jobs:
               IMAGE=dillax/user-app-backend:${GITHUB_SHA}
               sudo docker stop user_backend_app || true
               sudo docker rm user_backend_app || true
+              
               sudo docker run --name user_backend_app -d -p 8081:8081 \$IMAGE
             EOF
 
